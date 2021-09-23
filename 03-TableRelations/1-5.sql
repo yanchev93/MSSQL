@@ -177,3 +177,10 @@ CREATE TABLE Agenda(
 	CONSTRAINT FK_StudentID FOREIGN KEY (StudentID) REFERENCES Students(StudentID),
 	CONSTRAINT FK_SubjectID FOREIGN KEY (SubjectID) REFERENCES Subjects(SubjectID)
 )
+
+USE [Geography]
+
+SELECT MountainRange, PeakName, Elevation FROM Mountains
+	JOIN Peaks ON Peaks.MountainID = Mountains.Id
+	Where Mountains.MountainRange = 'Rila'
+	ORDER BY Peaks.Elevation DESC
