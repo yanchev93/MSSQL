@@ -39,4 +39,12 @@ SELECT J.JobId, ISNULL(SUM(P.Price * OP.Quantity), 0) AS TOTAL FROM Jobs AS J
 	ORDER BY TOTAL DESC, J.JobId
 
 --10. Missing Parts
-SELECT * FROM Parts
+SELECT P.PartId, P.[Description], PN.Quantity, P.StockQty, IIF(O.Delivered = 0, OP.Quantity, 0)
+	FROM Parts AS P
+	LEFT JOIN PartsNeeded AS PN ON PN.PartId = P.PartId
+	LEFT JOIN OrderParts AS OP ON OP.PartId = P.PartId
+	LEFT JOIN JOBS AS J ON J.JobId = PN.JobId
+	LEFT JOIN Orders AS O ON O.OrderId = OP.OrderId
+	WHERE J.[Status] != 'Finished'
+	AND (P.StockQty +  IIF(O.Delivered = 0, OP.Quantity, 0))< PN.Quantity
+	ORDER BY PartId
